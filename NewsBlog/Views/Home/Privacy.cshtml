@@ -1,0 +1,29 @@
+﻿<div class="dropdown">
+    <input type="text" placeholder="Search.." id="search">
+    <div id="results" class="dropdown-content"></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#search').keyup(function (e) {
+            e.preventDefault();
+            var title = $('#search').val();
+            title = encodeURIComponent(title);
+            $('#results').load('@Url.Action("ActiveSearch", "Home")?title=' + title);
+        });
+    });
+
+    var elem = document.getElementById('results');
+
+    let observer = new MutationObserver(function () {
+        var children = document.getElementById('searchresults').children;
+        for (var i = 0; i < children.length; i++) {
+            console.log(`${children[i].textContent}`);
+            children[i].setAttribute('style', 'background: yellow;');
+        }
+    });
+
+    observer.observe(elem, {
+        childList: true,
+    });
+
+</script>

@@ -1,0 +1,116 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.news-item {
+    max-width: auto;
+    border-bottom: solid;
+    border-color: gray;
+    border-width: thin;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+}
+
+.news-item-text-tags {
+    display: flex;
+    font-size: medium;
+}
+
+.news-item-date {
+    display: inherit;
+    width: fit-content;
+    background-color: silver;
+    padding: 5px;
+}
+
+.news-item-views-count {
+    display: inherit;
+    margin-left: 20px;
+    width: fit-content;
+    background-color: silver;
+    padding: 5px;
+}
+
+.news-item-picture {
+    width: 300px;
+    height: auto;
+    object-fit: cover;
+}
+
+.news-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-top: 20px;
+}
+
+pre {
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.addInput {
+    visibility: hidden;
+    margin-left: 20px;
+}
+
+.showInput {
+    visibility: visible;
+    transition: visibility 2s;
+}
+
+.imagePreview {
+    margin-top: 20px;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.dropdown-content {
+    position: absolute;
+    background-color: white;
+    min-width: 230px;
+    max-width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    z-index: 1;
+    padding: 5px;
+}
+
+.dropdown-content a {
+    color: black;
+    text-decoration: none;
+    display: block;
+    padding: 5px;
+}
+
+.dropdown-content a:hover {
+     background-color: #f1f1f1;
+     border-radius: 10px;
+}

@@ -1,0 +1,73 @@
+﻿@model NewsBlog.Models.NewsModel
+<script>
+    let idx = 0;
+    function addInput() {
+        idx++;
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.id = 'file';
+        input.name = 'files';
+        input.className = 'addInput';
+        input.setAttribute('onchange', `AddImg(${idx})`);
+
+        var img = document.createElement('img');
+        img.id = `${idx}`;
+        img.className = 'imagePreview';
+        img.src = '';
+
+        var br = document.createElement('br');
+
+        var container = document.getElementById('container');
+
+        container.appendChild(img);
+        container.appendChild(br);
+        container.appendChild(input);
+        container.appendChild(br);
+
+        input.classList.add('showInput');
+    }
+    let temp;
+    function AddImg(temp) {
+        document.getElementById(`${temp}`).setAttribute('src',
+            `${URL.createObjectURL(event.target.files[0])}`);
+    }
+</script>
+<h2>Редактирование новостей</h2>
+<form asp-action="Edit" asp-controller="Home" asp-route-id="@Model.Id"
+      enctype="multipart/form-data">
+    <label asp-for="Id" hidden></label>
+    <p>
+        <label asp-for="NewsTitle">Заголовок: </label><br />
+        <textarea class="form-control" id="exampleFormControlTextarea1"
+                  rows="3" asp-for="NewsTitle"></textarea>
+    </p>
+    <p>
+        <label asp-for="NewsDescription">Описание: </label><br />
+        <textarea class="form-control" id="exampleFormControlTextarea1"
+                  rows="3" asp-for="NewsDescription"></textarea>
+    </p>
+    <p>
+        <label asp-for="NewsContent">Текст: </label><br />
+        <textarea class="form-control" id="exampleFormControlTextarea1"
+                  rows="3" asp-for="NewsContent"></textarea>
+    </p>
+    <p id="container">
+        @foreach (var image in Model.NewsImages)
+        {
+            <img style="width: 200px; height: 200px; object-fit: cover;"
+             src="@Url.Action("GetImage", new { fileName = image.Name })"
+             class="img-fluid rounded-start">
+        }
+        <br />
+        <label>Картинка новости: </label><br />
+        <button class="btn btn-primary" type="button" name="addImgBtn" 
+        onclick="addInput()">Добавить фото</button><br />
+    </p>
+    <p>
+        <button class="btn btn-primary" type="submit">Изменить</button>
+        <button asp-controller="Home" asp-action="Index" class="btn btn-primary"
+                type="submit">
+            Отменить
+        </button>
+    </p>
+</form>

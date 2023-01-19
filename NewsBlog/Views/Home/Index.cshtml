@@ -1,0 +1,106 @@
+﻿@model NewsBlog.Models.IndexViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>Список новостей</h2>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            <button asp-action="Create" type="submit" class="btn-primary btn-sm">Добавить новость</button>
+            Поиск: <input type="text" placeholder="Введите текст поиска..." asp-for="CurrentFilter" />
+            <button type="submit" class="btn-primary btn-sm">Поиск</button>
+
+            Новостей в странице:
+            <select name="pageSize" asp-items="@Model.PageSizes" asp-for="CurrentPageSize"></select>
+            <button type="submit" class="btn-primary btn-sm">Изменить</button>
+
+            Сортировать по:
+            <select name="sortOrder" asp-items="@Model.SelectSorts" asp-for="CurrentSort"></select>
+            <button type="submit" class="btn-primary btn-sm">Сортировка</button>
+        </p>
+    </div>
+</form>
+
+@foreach (var item in Model.NewsModels)
+{
+    <div class="news-item">
+        <div class="news-item-text">
+            <div class="news-item-text-title">
+                <h5>@item.NewsTitle</h5>
+            </div>
+            <div class="news-item-text-tags">
+                <div class="news-item-date">
+                    <img style="padding-right: 5px;" src="/icons/calendar-date.svg" />
+                    <small>@item.NewsLastModified.ToShortDateString()</small>
+                </div>
+                <div class="news-item-views-count">
+                    <img style="padding-right: 5px;" src="/icons/eye.svg" />
+                    <small>@item.NewsViewCount</small>
+                </div>
+
+            </div>
+            <div class="news-item-text-description">
+                <p class="card-text">@item.NewsDescription</p>
+            </div>
+        </div>
+        <div class="news-item-image">
+            <div class="news-item-picture">
+                @if (item.NewsImages.Count != 0)
+                {
+                    <img class="news-item-picture" src="@Url.Action("GetImage",
+        new { fileName = item.NewsImages.FirstOrDefault().Name })">
+                }
+            </div>
+            <div class="news-control">
+                <a asp-controller="Home" asp-action="Edit" asp-route-id="@item.Id"
+               class="btn btn-primary btn-sm h-25">Изменить</a>
+                <button type="button" class="btn btn-primary btn-sm h-25" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Удалить
+                </button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Удаление новости</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                            </div>
+                            <div class="modal-body">Удалить новость ?</div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+                                <button type="button" class="btn btn-primary"
+                                    asp-controller="Home" asp-action="Delete" asp-route-id="@item.Id">
+                                    Удалить
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-pageSize="@ViewData["CurrentPageSize"]"
+   class="btn btn-default @prevDisabled">
+    Предыдущий
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-pageSize="@ViewData["CurrentPageSize"]"
+   class="btn btn-default @nextDisabled">
+    Следующий
+</a>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>METANIT.COM</title>
+</head>
+<body>
+<script>
+const xhr = new XMLHttpRequest();
+// GET-запрос к ресурсу /hello
+xhr.open("GET", "/hello");
+ 
+// обработчик получения ответа сервера
+xhr.onload = () => {
+    if (xhr.status == 200) {                // если код ответа 200
+        console.log(xhr.responseText);      // выводим полученный ответ на консоль браузера
+    } else {                                // иначе выводим текст статуса
+        console.log("Server response: ", xhr.statusText);
+    }
+};
+xhr.send();     // выполняем запрос
+</script>
+</body>
+</html>

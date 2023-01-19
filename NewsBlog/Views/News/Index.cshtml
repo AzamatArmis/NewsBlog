@@ -1,0 +1,85 @@
+﻿@using NewsBlog.Models
+@model IndexViewModel
+@{
+    ViewData["Title"] = "News";
+}
+
+<h2>Список новостей</h2>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Поиск: <input type="text" placeholder="Введите текст поиска..." asp-for="CurrentFilter" />
+            <button type="submit" class="btn-primary btn-sm">Поиск</button>
+
+            Новостей в странице:
+            <select name="pageSize" asp-items="@Model.PageSizes" asp-for="CurrentPageSize"></select>
+            <button type="submit" class="btn-primary btn-sm">Изменить</button>
+
+            Сортировать по:
+            <select name="sortOrder" asp-items="@Model.SelectSorts" asp-for="CurrentSort"></select>
+            <button type="submit" class="btn-primary btn-sm">Сортировка</button>
+        </p>
+    </div>
+</form>
+
+@foreach (var item in @Model.NewsModels)
+{
+    <div class="news-item">
+        <div class="news-item-text">
+            <div class="news-item-text-title">
+                <h5>
+                    <a class="text-decoration-none text-black"
+                   asp-controller="News" asp-action="ShowNews"
+                   asp-route-id="@item.Id">@item.NewsTitle</a>
+                </h5>
+            </div>
+            <div class="news-item-text-tags">
+                <div class="news-item-date">
+                    <img style="padding-right: 5px;" src="/icons/calendar-date.svg" />
+                    <small>@item.NewsLastModified.ToShortDateString()</small>
+                </div>
+                <div class="news-item-views-count">
+                    <img style="padding-right: 5px;" src="/icons/eye.svg" />
+                    <small>@item.NewsViewCount</small>
+                </div>
+            </div>
+            <div class="news-item-text-description">
+                <p class="card-text">@item.NewsDescription</p>
+            </div>
+        </div>
+        <div class="news-item-image">
+            <div class="news-item-picture">
+                @if (item.NewsImages.Count != 0)
+                {
+                    <a class="text-decoration-none text-black" asp-controller="News"
+       asp-action="ShowNews" asp-route-id="@item.Id">
+                    <img class="news-item-picture" src="@Url.Action("GetImage",
+        new { fileName = item.NewsImages.FirstOrDefault().Name })"></a>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-pageSize="@ViewData["CurrentPageSize"]"
+   class="btn btn-default @prevDisabled">
+    Предыдущий
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-pageSize="@ViewData["CurrentPageSize"]"
+   class="btn btn-default @nextDisabled">
+    Следующий
+</a>

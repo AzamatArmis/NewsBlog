@@ -1,0 +1,57 @@
+﻿<p align="center">
+    @{
+        string imageName = Enumerable.FirstOrDefault(Model.NewsImages).Name;
+        var images = Enumerable.Skip(Model.NewsImages, 1);
+        var count = Enumerable.Count(Model.NewsImages);
+    }
+    @if (count > 0)
+    {
+        <div id="myCarousel" class="carousel slide" align="center">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="@Url.Action("GetImage", new { fileName = imageName })"
+                     style="width: 100%; object-fit: cover;">
+                </div>
+                @if (count > 1)
+                {
+                    @foreach (var image in images)
+                    {
+                        <div class="carousel-item">
+                            <img src="@Url.Action("GetImage", new { fileName = image.Name })"
+                     style="width: 100%; object-fit: cover;">
+                        </div>
+                    }
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    }
+</p>
+
+<h3>@Model.NewsTitle</h3>
+
+<div style="padding-top: 20px;" class="news-item-text-tags">
+    <div class="news-item-date">
+        <img style="padding-right: 5px;" src="/icons/calendar-date.svg" />
+        <small>@Model.NewsLastModified.ToShortDateString()</small>
+    </div>
+    <div class="news-item-views-count">
+        <img style="padding-right: 5px;" src="/icons/eye.svg" />
+        <small>@Model.NewsViewCount</small>
+    </div>
+
+</div>
+
+<pre style="display:flex; padding-top: 20px;"><p align="justify">@Model.NewsContent</p></pre>
+<script>
+    const carousel = new bootstrap.Carousel('#myCarousel')
+</script>
